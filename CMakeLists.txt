@@ -234,6 +234,27 @@ if (WIN32 AND BONZOMATIC_NDI)
 endif ()
 
 ##############################################################################
+# MONGOOSE NETWORK
+set(BZC_PROJECT_INCLUDES ${BZC_PROJECT_INCLUDES} ${CMAKE_SOURCE_DIR}/external/mongoose)
+set(MONGOOSE_SRCS
+	${CMAKE_SOURCE_DIR}/external/mongoose/mongoose.c
+)
+add_library(bzc_mongoose STATIC ${MONGOOSE_SRCS})
+
+target_include_directories(bzc_mongoose PUBLIC ${CMAKE_SOURCE_DIR}/external/mongoose)
+if (MSVC)
+	target_compile_options(bzc_mongoose PUBLIC "$<$<CONFIG:Release>:/MT>")
+endif ()
+set(BZC_PROJECT_LIBS ${BZC_PROJECT_LIBS} bzc_mongoose)
+#set(BZC_PROJECT_INCLUDES ${BZC_PROJECT_INCLUDES} ${CMAKE_SOURCE_DIR}/external/mongoose)
+
+set(BZC_LIFX_SRCS
+${CMAKE_SOURCE_DIR}/src/lifx/lifx_mongoose.cpp
+)
+
+source_group("Bonzomatic\\Lifx" FILES ${BZC_LIFX_SRCS})
+
+##############################################################################
 # SCINTILLA
 if (BONZOMATIC_USE_SYSTEM_SCINTILLA)
   pkg_search_module(PKGCHK_SCINTILLA REQUIRED scintilla)
@@ -395,7 +416,7 @@ else ()
 endif ()
 source_group("Bonzomatic\\Capture" FILES ${BZC_CAPTURE_SRCS})
 
-set(BZC_PROJECT_SRCS ${BZC_PROJECT_SRCS} ${BZC_PLATFORM_SRCS} ${BZC_RESOURCES_DATA} ${BZC_CAPTURE_SRCS})
+set(BZC_PROJECT_SRCS ${BZC_PROJECT_SRCS} ${BZC_PLATFORM_SRCS} ${BZC_RESOURCES_DATA} ${BZC_CAPTURE_SRCS} ${BZC_LIFX_SRCS})
 
 set(BZC_PROJECT_INCLUDES ${CMAKE_SOURCE_DIR}/src ${BZC_PROJECT_INCLUDES})
 

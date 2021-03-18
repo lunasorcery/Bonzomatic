@@ -13,6 +13,7 @@
 #include "Renderer.h"
 #include "FFT.h"
 #include "MIDI.h"
+#include "LIFX.h"
 #include "Timer.h"
 #include "Misc.h"
 #include "UniConversion.h"
@@ -156,6 +157,12 @@ int main( int argc, const char *argv[] )
   if (!MIDI::Open())
   {
     printf("MIDI::Open() failed, continuing anyway...\n");
+    //return -1;
+  }
+
+  if (!LIFX::Open(settings.sRenderer))
+  {
+    printf("LIFX::Open() failed, continuing anyway...\n");
     //return -1;
   }
 
@@ -584,6 +591,8 @@ int main( int argc, const char *argv[] )
     Renderer::EndFrame();
 
     Capture::CaptureFrame();
+
+    LIFX::UpdateColor();
 
     if (newShader)
     {
