@@ -695,11 +695,6 @@ namespace Renderer
 
   Texture * CreateRGBA8Texture()
   {
-    void * data = NULL;
-    GLenum internalFormat = GL_SRGB8_ALPHA8;
-    GLenum srcFormat = GL_FLOAT;
-    GLenum format = GL_UNSIGNED_BYTE;
-
     GLuint glTexId = 0;
     glGenTextures( 1, &glTexId );
     glBindTexture( GL_TEXTURE_2D, glTexId );
