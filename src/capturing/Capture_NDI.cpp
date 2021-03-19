@@ -20,16 +20,17 @@ namespace Capture
   {
     if (o.has<jsonxx::Object>("ndi"))
     {
-      if (o.get<jsonxx::Object>("ndi").has<jsonxx::Boolean>("enabled"))
-        bNDIEnabled = o.get<jsonxx::Object>("ndi").get<jsonxx::Boolean>("enabled");
-      if (o.get<jsonxx::Object>("ndi").has<jsonxx::String>("connectionString"))
-        sNDIConnectionString = o.get<jsonxx::Object>("ndi").get<jsonxx::String>("connectionString");
-      if (o.get<jsonxx::Object>("ndi").has<jsonxx::String>("identifier"))
-        sNDIIdentifier = o.get<jsonxx::Object>("ndi").get<jsonxx::String>("identifier");
-      if (o.get<jsonxx::Object>("ndi").has<jsonxx::Number>("frameRate"))
-        fNDIFrameRate = (float)o.get<jsonxx::Object>("ndi").get<jsonxx::Number>("frameRate");
-      if (o.get<jsonxx::Object>("ndi").has<jsonxx::Boolean>("progressive"))
-        bNDIProgressive = o.get<jsonxx::Object>("ndi").get<jsonxx::Boolean>("progressive");
+      auto const& cfgNdi = o.get<jsonxx::Object>("ndi");
+      if (cfgNdi.has<jsonxx::Boolean>("enabled"))
+        bNDIEnabled = cfgNdi.get<jsonxx::Boolean>("enabled");
+      if (cfgNdi.has<jsonxx::String>("connectionString"))
+        sNDIConnectionString = cfgNdi.get<jsonxx::String>("connectionString");
+      if (cfgNdi.has<jsonxx::String>("identifier"))
+        sNDIIdentifier = cfgNdi.get<jsonxx::String>("identifier");
+      if (cfgNdi.has<jsonxx::Number>("frameRate"))
+        fNDIFrameRate = (float)cfgNdi.get<jsonxx::Number>("frameRate");
+      if (cfgNdi.has<jsonxx::Boolean>("progressive"))
+        bNDIProgressive = cfgNdi.get<jsonxx::Boolean>("progressive");
     }
   }
   bool Open(RendererSettings & settings)
