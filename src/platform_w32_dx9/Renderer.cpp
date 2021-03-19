@@ -268,8 +268,8 @@ namespace Renderer
 
     case WM_LBUTTONDOWN: 
       {
-        mouseEventBuffer[mouseEventBufferCount].eventType = MOUSEEVENTTYPE_DOWN;
-        mouseEventBuffer[mouseEventBufferCount].button = MOUSEBUTTON_LEFT;
+        mouseEventBuffer[mouseEventBufferCount].eventType = MouseEventType::Down;
+        mouseEventBuffer[mouseEventBufferCount].button = MouseButton::Left;
         mouseEventBuffer[mouseEventBufferCount].x = GET_X_LPARAM(lParam);
         mouseEventBuffer[mouseEventBufferCount].y = GET_Y_LPARAM(lParam);
         mouseEventBufferCount++;
@@ -277,7 +277,7 @@ namespace Renderer
 
     case WM_MOUSEMOVE: 
       {
-        mouseEventBuffer[mouseEventBufferCount].eventType = MOUSEEVENTTYPE_MOVE;
+        mouseEventBuffer[mouseEventBufferCount].eventType = MouseEventType::Move;
         mouseEventBuffer[mouseEventBufferCount].x = GET_X_LPARAM(lParam);
         mouseEventBuffer[mouseEventBufferCount].y = GET_Y_LPARAM(lParam);
         mouseEventBufferCount++;
@@ -285,8 +285,8 @@ namespace Renderer
 
     case WM_LBUTTONUP: 
       {
-        mouseEventBuffer[mouseEventBufferCount].eventType = MOUSEEVENTTYPE_UP;
-        mouseEventBuffer[mouseEventBufferCount].button = MOUSEBUTTON_LEFT;
+        mouseEventBuffer[mouseEventBufferCount].eventType = MouseEventType::Up;
+        mouseEventBuffer[mouseEventBufferCount].button = MouseButton::Left;
         mouseEventBuffer[mouseEventBufferCount].x = GET_X_LPARAM(lParam);
         mouseEventBuffer[mouseEventBufferCount].y = GET_Y_LPARAM(lParam);
         mouseEventBufferCount++;
@@ -294,7 +294,7 @@ namespace Renderer
 
     case WM_MOUSEWHEEL:
       {
-        mouseEventBuffer[mouseEventBufferCount].eventType = MOUSEEVENTTYPE_SCROLL;
+        mouseEventBuffer[mouseEventBufferCount].eventType = MouseEventType::Scroll;
         mouseEventBuffer[mouseEventBufferCount].x = 0;
         mouseEventBuffer[mouseEventBufferCount].y = GET_WHEEL_DELTA_WPARAM(wParam) / WHEEL_DELTA;
         mouseEventBufferCount++;
@@ -302,7 +302,7 @@ namespace Renderer
 
     case WM_MOUSEHWHEEL:
       {
-        mouseEventBuffer[mouseEventBufferCount].eventType = MOUSEEVENTTYPE_SCROLL;
+        mouseEventBuffer[mouseEventBufferCount].eventType = MouseEventType::Scroll;
         mouseEventBuffer[mouseEventBufferCount].x = -GET_WHEEL_DELTA_WPARAM(wParam) / WHEEL_DELTA;
         mouseEventBuffer[mouseEventBufferCount].y = 0;
         mouseEventBufferCount++;
@@ -348,7 +348,7 @@ namespace Renderer
 
     DWORD wExStyle = WS_EX_APPWINDOW;
     DWORD wStyle = WS_POPUP | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
-    if (pSetup->windowMode == RENDERER_WINDOWMODE_WINDOWED) wStyle |= WS_OVERLAPPED | WS_CAPTION;
+    if (pSetup->windowMode == WindowMode::Windowed) wStyle |= WS_OVERLAPPED | WS_CAPTION;
 
     RECT wr={0,0,pSetup->nWidth,pSetup->nHeight};
     AdjustWindowRectEx(&wr, wStyle, FALSE, wExStyle);
@@ -386,7 +386,7 @@ namespace Renderer
 
     d3dpp.SwapEffect     = D3DSWAPEFFECT_DISCARD;
     d3dpp.hDeviceWindow  = hWnd;
-    d3dpp.Windowed       = pSetup->windowMode != RENDERER_WINDOWMODE_FULLSCREEN;
+    d3dpp.Windowed       = pSetup->windowMode != WindowMode::Fullscreen;
     d3dpp.PresentationInterval = pSetup->bVsync ? D3DPRESENT_INTERVAL_ONE : D3DPRESENT_INTERVAL_IMMEDIATE;
 
     d3dpp.BackBufferCount  = 1;
@@ -640,7 +640,7 @@ namespace Renderer
     tex->pTexture = pTex;
     tex->width = nWidth;
     tex->height = nHeight;
-    tex->type = TEXTURETYPE_2D;
+    tex->type = TextureType::Tex2D;
     return tex;
 
   }
@@ -672,7 +672,7 @@ namespace Renderer
     tex->pTexture = pTex;
     tex->width = info.Width;
     tex->height = info.Height;
-    tex->type = TEXTURETYPE_2D;
+    tex->type = TextureType::Tex2D;
     return tex;
   }
 
@@ -693,7 +693,7 @@ namespace Renderer
     tex->pTexture = pTex;
     tex->width = w;
     tex->height = 1;
-    tex->type = TEXTURETYPE_1D;
+    tex->type = TextureType::Tex1D;
     return tex;
   }
 
@@ -752,7 +752,7 @@ namespace Renderer
     tex->pTexture = pTex;
     tex->width = w;
     tex->height = h;
-    tex->type = TEXTURETYPE_1D;
+    tex->type = TextureType::Tex1D;
     return tex;
   }
 

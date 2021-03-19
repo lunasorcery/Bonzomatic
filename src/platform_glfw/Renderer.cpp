@@ -255,7 +255,7 @@ namespace Renderer
     // Prevent fullscreen window minimize on focus loss
     glfwWindowHint(GLFW_AUTO_ICONIFY, GL_FALSE);
 
-    GLFWmonitor *monitor = settings->windowMode == RENDERER_WINDOWMODE_FULLSCREEN ? glfwGetPrimaryMonitor() : NULL;
+    GLFWmonitor *monitor = settings->windowMode == WindowMode::Fullscreen ? glfwGetPrimaryMonitor() : NULL;
 
     mWindow = glfwCreateWindow(nWidth, nHeight, "BONZOMATIC - GLFW edition", monitor, NULL);
     if (!mWindow)
@@ -538,19 +538,19 @@ namespace Renderer
   }
   void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
   {
-    mouseEventBuffer[mouseEventBufferCount].eventType = MOUSEEVENTTYPE_MOVE;
+    mouseEventBuffer[mouseEventBufferCount].eventType = MouseEventType::Move;
     mouseEventBuffer[mouseEventBufferCount].x = xpos;
     mouseEventBuffer[mouseEventBufferCount].y = ypos;
-    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) mouseEventBuffer[mouseEventBufferCount].button = MOUSEBUTTON_LEFT;
+    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) mouseEventBuffer[mouseEventBufferCount].button = MouseButton::Left;
     mouseEventBufferCount++;
   }
   void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
   {
     if (action == GLFW_PRESS) {
-      mouseEventBuffer[mouseEventBufferCount].eventType = MOUSEEVENTTYPE_DOWN;
+      mouseEventBuffer[mouseEventBufferCount].eventType = MouseEventType::Down;
     }
     else if (action == GLFW_RELEASE) {
-      mouseEventBuffer[mouseEventBufferCount].eventType = MOUSEEVENTTYPE_UP;
+      mouseEventBuffer[mouseEventBufferCount].eventType = MouseEventType::Up;
     }
     double xpos, ypos;
     glfwGetCursorPos(window, &xpos, &ypos);
@@ -558,16 +558,16 @@ namespace Renderer
     mouseEventBuffer[mouseEventBufferCount].y = ypos;
     switch(button)
     {
-      case GLFW_MOUSE_BUTTON_MIDDLE: mouseEventBuffer[mouseEventBufferCount].button = MOUSEBUTTON_MIDDLE; break;
-      case GLFW_MOUSE_BUTTON_RIGHT:  mouseEventBuffer[mouseEventBufferCount].button = MOUSEBUTTON_RIGHT; break;
+      case GLFW_MOUSE_BUTTON_MIDDLE: mouseEventBuffer[mouseEventBufferCount].button = MouseButton::Middle; break;
+      case GLFW_MOUSE_BUTTON_RIGHT:  mouseEventBuffer[mouseEventBufferCount].button = MouseButton::Right; break;
       case GLFW_MOUSE_BUTTON_LEFT:
-      default:                mouseEventBuffer[mouseEventBufferCount].button = MOUSEBUTTON_LEFT; break;
+      default:                mouseEventBuffer[mouseEventBufferCount].button = MouseButton::Left; break;
     }
     mouseEventBufferCount++;
   }
   void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
   {
-    mouseEventBuffer[mouseEventBufferCount].eventType = MOUSEEVENTTYPE_SCROLL;
+    mouseEventBuffer[mouseEventBufferCount].eventType = MouseEventType::Scroll;
     mouseEventBuffer[mouseEventBufferCount].x = xoffset;
     mouseEventBuffer[mouseEventBufferCount].y = yoffset;
     mouseEventBufferCount++;
@@ -713,7 +713,7 @@ namespace Renderer
     tex->width = nWidth;
     tex->height = nHeight;
     tex->ID = glTexId;
-    tex->type = TEXTURETYPE_2D;
+    tex->type = TextureType::Tex2D;
     tex->unit = textureUnit++;
     return tex;
   }
@@ -756,7 +756,7 @@ namespace Renderer
     tex->width = width;
     tex->height = height;
     tex->ID = glTexId;
-    tex->type = TEXTURETYPE_2D;
+    tex->type = TextureType::Tex2D;
     tex->unit = textureUnit++;
     return tex;
   }
@@ -785,7 +785,7 @@ namespace Renderer
     tex->width = w;
     tex->height = 1;
     tex->ID = glTexId;
-    tex->type = TEXTURETYPE_1D;
+    tex->type = TextureType::Tex1D;
     tex->unit = textureUnit++;
     return tex;
   }
@@ -802,8 +802,8 @@ namespace Renderer
       glActiveTexture( GL_TEXTURE0 + ((GLTexture*)tex)->unit );
       switch( tex->type)
       {
-        case TEXTURETYPE_1D: glBindTexture( GL_TEXTURE_1D, ((GLTexture*)tex)->ID ); break;
-        case TEXTURETYPE_2D: glBindTexture( GL_TEXTURE_2D, ((GLTexture*)tex)->ID ); break;
+        case TextureType::Tex1D: glBindTexture( GL_TEXTURE_1D, ((GLTexture*)tex)->ID ); break;
+        case TextureType::Tex2D: glBindTexture( GL_TEXTURE_2D, ((GLTexture*)tex)->ID ); break;
       }
     }
   }
@@ -833,7 +833,7 @@ namespace Renderer
     tex->width = w;
     tex->height = h;
     tex->ID = glTexId;
-    tex->type = TEXTURETYPE_2D;
+    tex->type = TextureType::Tex2D;
     tex->unit = 0; // this is always 0 cos we're not using shaders here
     return tex;
   }
@@ -934,8 +934,8 @@ namespace Renderer
           glActiveTexture( GL_TEXTURE0 + ((GLTexture*)tex)->unit );
           switch( tex->type)
           {
-            case TEXTURETYPE_1D: glBindTexture( GL_TEXTURE_1D, ((GLTexture*)tex)->ID ); break;
-            case TEXTURETYPE_2D: glBindTexture( GL_TEXTURE_2D, ((GLTexture*)tex)->ID ); break;
+            case TextureType::Tex1D: glBindTexture( GL_TEXTURE_1D, ((GLTexture*)tex)->ID ); break;
+            case TextureType::Tex2D: glBindTexture( GL_TEXTURE_2D, ((GLTexture*)tex)->ID ); break;
           }
         }
 

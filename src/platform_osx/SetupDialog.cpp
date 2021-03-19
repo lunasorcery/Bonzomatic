@@ -75,7 +75,7 @@ bool Open( SetupDialog::SETTINGS * settings )
   
   // Setup defaults according to the settings
   CFOptionFlags settingsFlags = 0;
-  if (settings->sRenderer.windowMode == RENDERER_WINDOWMODE_FULLSCREEN) {
+  if (settings->sRenderer.windowMode == WindowMode::Fullscreen) {
     settingsFlags |= CFUserNotificationCheckBoxChecked(0);
   }
   int idx=0;
@@ -95,9 +95,9 @@ bool Open( SetupDialog::SETTINGS * settings )
   
   // Collect the user selection and feed the settings
   if (responseFlags & CFUserNotificationCheckBoxChecked(0)) {
-    settings->sRenderer.windowMode = RENDERER_WINDOWMODE_FULLSCREEN;
+    settings->sRenderer.windowMode = WindowMode::Fullscreen;
   } else {
-    settings->sRenderer.windowMode = RENDERER_WINDOWMODE_WINDOWED;
+    settings->sRenderer.windowMode = WindowMode::Windowed;
   }
   idx = (int)responseFlags >> 24;
   if ((idx >= 0) && (idx < resolutions.size())) {

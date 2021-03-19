@@ -48,10 +48,10 @@
 #include <ExternalLexer.h>
 #endif
 
-enum AutoIndentationType {
-  aitNone,
-  aitPreserve,
-  aitSmart
+enum class AutoIndentationType {
+  None,
+  Preserve,
+  Smart
 };
 
 struct SHADEREDITOR_THEME {
@@ -154,11 +154,11 @@ public:
   Scintilla::Font * GetTextFont();
     
 private:
-  enum IndentationStatus {
-    isNone,        // no effect on indentation
-    isBlockStart,  // indentation block begin such as "{" or VB "function"
-    isBlockEnd,    // indentation end indicator such as "}" or VB "end"
-    isKeyWordStart // Keywords that cause indentation
+  enum class IndentationStatus {
+    None,        // no effect on indentation
+    BlockStart,  // indentation block begin such as "{" or VB "function"
+    BlockEnd,    // indentation end indicator such as "}" or VB "end"
+    KeyWordStart // Keywords that cause indentation
   };
   
   int GetLineLength(int line);

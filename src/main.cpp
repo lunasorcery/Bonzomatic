@@ -117,11 +117,11 @@ int main( int argc, const char *argv[] )
 #ifdef _DEBUG
   settings.sRenderer.nWidth = 1280;
   settings.sRenderer.nHeight = 720;
-  settings.sRenderer.windowMode = RENDERER_WINDOWMODE_WINDOWED;
+  settings.sRenderer.windowMode = WindowMode::Windowed;
 #else
   settings.sRenderer.nWidth = 1920;
   settings.sRenderer.nHeight = 1080;
-  settings.sRenderer.windowMode = RENDERER_WINDOWMODE_FULLSCREEN;
+  settings.sRenderer.windowMode = WindowMode::Fullscreen;
 
   if ( options.has<jsonxx::Object>( "window" ) )
   {
@@ -130,7 +130,7 @@ int main( int argc, const char *argv[] )
     if ( options.get<jsonxx::Object>( "window" ).has<jsonxx::Number>( "height" ) )
       settings.sRenderer.nHeight = options.get<jsonxx::Object>( "window" ).get<jsonxx::Number>( "height" );
     if ( options.get<jsonxx::Object>( "window" ).has<jsonxx::Boolean>( "fullscreen" ) )
-      settings.sRenderer.windowMode = options.get<jsonxx::Object>( "window" ).get<jsonxx::Boolean>( "fullscreen" ) ? RENDERER_WINDOWMODE_FULLSCREEN : RENDERER_WINDOWMODE_WINDOWED;
+      settings.sRenderer.windowMode = options.get<jsonxx::Object>( "window" ).get<jsonxx::Boolean>( "fullscreen" ) ? WindowMode::Fullscreen : WindowMode::Windowed;
   }
   if ( !skipSetupDialog )
   {
@@ -178,7 +178,7 @@ int main( int argc, const char *argv[] )
   editorOptions.bUseSpacesForTabs = true;
   editorOptions.nTabSize = 2;
   editorOptions.bVisibleWhitespace = false;
-  editorOptions.eAutoIndent = aitSmart;
+  editorOptions.eAutoIndent = AutoIndentationType::Smart;
 
   int nDebugOutputHeight = 200;
   int nTexPreviewWidth = 64;
@@ -249,11 +249,11 @@ int main( int argc, const char *argv[] )
       {
         std::string autoIndent = options.get<jsonxx::Object>("gui").get<jsonxx::String>("autoIndent");
         if (autoIndent == "smart") {
-          editorOptions.eAutoIndent = aitSmart;
+          editorOptions.eAutoIndent = AutoIndentationType::Smart;
         } else if (autoIndent == "preserve") {
-          editorOptions.eAutoIndent = aitPreserve;
+          editorOptions.eAutoIndent = AutoIndentationType::Preserve;
         } else {
-          editorOptions.eAutoIndent = aitNone;
+          editorOptions.eAutoIndent = AutoIndentationType::None;
         }
       }
       if (options.get<jsonxx::Object>("gui").has<jsonxx::Number>("scrollXFactor"))
@@ -412,16 +412,16 @@ int main( int argc, const char *argv[] )
       {
         switch (Renderer::mouseEventBuffer[i].eventType)
         {
-          case Renderer::MOUSEEVENTTYPE_MOVE:
+          case Renderer::MouseEventType::Move:
             mShaderEditor.ButtonMovePublic( Scintilla::Point( Renderer::mouseEventBuffer[i].x, Renderer::mouseEventBuffer[i].y ) );
             break;
-          case Renderer::MOUSEEVENTTYPE_DOWN:
+          case Renderer::MouseEventType::Down:
             mShaderEditor.ButtonDown( Scintilla::Point( Renderer::mouseEventBuffer[i].x, Renderer::mouseEventBuffer[i].y ), time * 1000, false, false, false );
             break;
-          case Renderer::MOUSEEVENTTYPE_UP:
+          case Renderer::MouseEventType::Up:
             mShaderEditor.ButtonUp( Scintilla::Point( Renderer::mouseEventBuffer[i].x, Renderer::mouseEventBuffer[i].y ), time * 1000, false );
             break;
-          case Renderer::MOUSEEVENTTYPE_SCROLL:
+          case Renderer::MouseEventType::Scroll:
             mShaderEditor.WndProc( SCI_LINESCROLL, (int)(-Renderer::mouseEventBuffer[i].x * fScrollXFactor), (int)(-Renderer::mouseEventBuffer[i].y * fScrollYFactor));
             break;
         }

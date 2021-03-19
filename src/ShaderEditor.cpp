@@ -246,9 +246,9 @@ void ShaderEditor::NotifyParent( Scintilla::SCNotification scn )
   switch (scn.nmhdr.code) {
     case SCN_CHARADDED:
       char ch = static_cast<char>(scn.ch);
-      if(eAutoIndent == aitPreserve) {
+      if(eAutoIndent == AutoIndentationType::Preserve) {
         PreserveIndentation(ch);
-      } else if (aitSmart) {
+      } else if (eAutoIndent == AutoIndentationType::Smart) {
         AutomaticIndentation(ch);
       }
       break;
@@ -535,12 +535,12 @@ bool ShaderEditor::isAStatementIndent(std::string &word) {
 
 ShaderEditor::IndentationStatus ShaderEditor::GetIndentState(int line) {
   size_t i;
-  IndentationStatus indentState = isNone;
+  IndentationStatus indentState = IndentationStatus::None;
   std::vector<std::string> controlWords = GetLinePartsInStyle(line, statementIndentStyleNumber);
   for (i=0; i<controlWords.size(); i++) {
     std::string &controlWord = controlWords[i];
     if (isAStatementIndent(controlWord)) {
-      indentState = isKeyWordStart;
+      indentState = IndentationStatus::KeyWordStart;
     }
   }
   
@@ -549,7 +549,7 @@ ShaderEditor::IndentationStatus ShaderEditor::GetIndentState(int line) {
     std::string &controlWord = controlWords[i];
     if (controlWord.size() < 1) continue;
     if (statementEnd == controlWord[0]) {
-      indentState = isNone;
+      indentState = IndentationStatus::None;
     }
   }
   
@@ -557,10 +557,10 @@ ShaderEditor::IndentationStatus ShaderEditor::GetIndentState(int line) {
     std::string &controlWord = controlWords[i];
     if (controlWord.size() < 1) continue;
     if (blockEnd == controlWord[0]) {
-      indentState = isBlockEnd;
+      indentState = IndentationStatus::BlockEnd;
     }
     if (blockStart == controlWord[0]) {
-      indentState = isBlockStart;
+      indentState = IndentationStatus::BlockStart;
     }
   }
   
@@ -573,23 +573,23 @@ int ShaderEditor::IndentOfBlock(int line) {
   int indentSize = WndProc(SCI_GETINDENT, 0, 0);
   int indentBlock = GetLineIndentation(line);
   int backLine = line;
-  IndentationStatus indentState = isNone;
+  IndentationStatus indentState = IndentationStatus::None;
 
   int lineLimit = line - statementLookback;
   if (lineLimit < 0) lineLimit = 0;
 
-  while ((backLine >= lineLimit) && (indentState == isNone)) {
+  while ((backLine >= lineLimit) && (indentState == IndentationStatus::None)) {
     indentState = GetIndentState(backLine);
-    if (indentState != isNone) {
+    if (indentState != IndentationStatus::None) {
       indentBlock = GetLineIndentation(backLine);
-      if (indentState == isBlockStart) {
+      if (indentState == IndentationStatus::BlockStart) {
           indentBlock += indentSize;
       }
-      if (indentState == isBlockEnd) {
+      if (indentState == IndentationStatus::BlockEnd) {
         if (indentBlock < 0)
           indentBlock = 0;
       }
-      if ((indentState == isKeyWordStart) && (backLine == line))
+      if ((indentState == IndentationStatus::KeyWordStart) && (backLine == line))
         indentBlock += indentSize;
     }
     backLine--;
@@ -619,7 +619,7 @@ void ShaderEditor::AutomaticIndentation(char ch) {
       SetLineIndentation(curLine, indentBlock - indentSize);
     }
   } else if (ch == blockStart) {
-    if (GetIndentState(curLine - 1) == isKeyWordStart) {
+    if (GetIndentState(curLine - 1) == IndentationStatus::KeyWordStart) {
       if (RangeIsAllWhitespace(thisLineStart, selStart - 1)) {
         SetLineIndentation(curLine, indentBlock - indentSize);
       }

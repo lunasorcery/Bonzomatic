@@ -128,7 +128,7 @@ public:
           }
         }
 
-        if (setup->sRenderer.windowMode == RENDERER_WINDOWMODE_FULLSCREEN) {
+        if (setup->sRenderer.windowMode == WindowMode::Fullscreen) {
           SendDlgItemMessage(hWnd, IDC_FULLSCREEN, BM_SETCHECK, 1, 1);
         }
         if (setup->sRenderer.bVsync) {
@@ -148,7 +148,7 @@ public:
           {
             setup->sRenderer.nWidth  = gaResolutions[ SendDlgItemMessage(hWnd, IDC_RESOLUTION, CB_GETCURSEL, 0, 0) ].nWidth;
             setup->sRenderer.nHeight = gaResolutions[ SendDlgItemMessage(hWnd, IDC_RESOLUTION, CB_GETCURSEL, 0, 0) ].nHeight;
-            setup->sRenderer.windowMode = SendDlgItemMessage(hWnd, IDC_FULLSCREEN, BM_GETCHECK , 0, 0) ? RENDERER_WINDOWMODE_FULLSCREEN : RENDERER_WINDOWMODE_WINDOWED;
+            setup->sRenderer.windowMode = SendDlgItemMessage(hWnd, IDC_FULLSCREEN, BM_GETCHECK , 0, 0) ? WindowMode::Fullscreen : WindowMode::Windowed;
             setup->sRenderer.bVsync = SendDlgItemMessage(hWnd, IDC_VSYNC, BM_GETCHECK , 0, 0) > 0;
 
             setup->sFFT.bUseRecordingDevice = gaAudioDevices[ SendDlgItemMessage(hWnd, IDC_AUDIOSOURCE, CB_GETCURSEL, 0, 0) ].bIsCapture;

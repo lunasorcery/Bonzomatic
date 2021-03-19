@@ -266,8 +266,8 @@ namespace Renderer
 
     case WM_LBUTTONDOWN: 
       {
-        mouseEventBuffer[mouseEventBufferCount].eventType = MOUSEEVENTTYPE_DOWN;
-        mouseEventBuffer[mouseEventBufferCount].button = MOUSEBUTTON_LEFT;
+        mouseEventBuffer[mouseEventBufferCount].eventType = MouseEventType::Down;
+        mouseEventBuffer[mouseEventBufferCount].button = MouseButton::Left;
         mouseEventBuffer[mouseEventBufferCount].x = GET_X_LPARAM(lParam);
         mouseEventBuffer[mouseEventBufferCount].y = GET_Y_LPARAM(lParam);
         mouseEventBufferCount++;
@@ -275,7 +275,7 @@ namespace Renderer
 
     case WM_MOUSEMOVE: 
       {
-        mouseEventBuffer[mouseEventBufferCount].eventType = MOUSEEVENTTYPE_MOVE;
+        mouseEventBuffer[mouseEventBufferCount].eventType = MouseEventType::Move;
         mouseEventBuffer[mouseEventBufferCount].x = GET_X_LPARAM(lParam);
         mouseEventBuffer[mouseEventBufferCount].y = GET_Y_LPARAM(lParam);
         mouseEventBufferCount++;
@@ -283,8 +283,8 @@ namespace Renderer
 
     case WM_LBUTTONUP: 
       {
-        mouseEventBuffer[mouseEventBufferCount].eventType = MOUSEEVENTTYPE_UP;
-        mouseEventBuffer[mouseEventBufferCount].button = MOUSEBUTTON_LEFT;
+        mouseEventBuffer[mouseEventBufferCount].eventType = MouseEventType::Up;
+        mouseEventBuffer[mouseEventBufferCount].button = MouseButton::Left;
         mouseEventBuffer[mouseEventBufferCount].x = GET_X_LPARAM(lParam);
         mouseEventBuffer[mouseEventBufferCount].y = GET_Y_LPARAM(lParam);
         mouseEventBufferCount++;
@@ -292,7 +292,7 @@ namespace Renderer
 
     case WM_MOUSEWHEEL:
       {
-        mouseEventBuffer[mouseEventBufferCount].eventType = MOUSEEVENTTYPE_SCROLL;
+        mouseEventBuffer[mouseEventBufferCount].eventType = MouseEventType::Scroll;
         mouseEventBuffer[mouseEventBufferCount].x = 0;
         mouseEventBuffer[mouseEventBufferCount].y = GET_WHEEL_DELTA_WPARAM(wParam) / WHEEL_DELTA;
         mouseEventBufferCount++;
@@ -300,7 +300,7 @@ namespace Renderer
 
     case WM_MOUSEHWHEEL:
       {
-        mouseEventBuffer[mouseEventBufferCount].eventType = MOUSEEVENTTYPE_SCROLL;
+        mouseEventBuffer[mouseEventBufferCount].eventType = MouseEventType::Scroll;
         mouseEventBuffer[mouseEventBufferCount].x = -GET_WHEEL_DELTA_WPARAM(wParam) / WHEEL_DELTA;
         mouseEventBuffer[mouseEventBufferCount].y = 0;
         mouseEventBufferCount++;
@@ -346,7 +346,7 @@ namespace Renderer
 
     DWORD wExStyle = WS_EX_APPWINDOW;
     DWORD wStyle = WS_POPUP | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
-    if (pSetup->windowMode == RENDERER_WINDOWMODE_WINDOWED) wStyle |= WS_OVERLAPPED | WS_CAPTION;
+    if (pSetup->windowMode == WindowMode::Windowed) wStyle |= WS_OVERLAPPED | WS_CAPTION;
 
     RECT wr={0,0,pSetup->nWidth,pSetup->nHeight};
     AdjustWindowRectEx(&wr, wStyle, FALSE, wExStyle);
@@ -421,7 +421,7 @@ namespace Renderer
     desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
     desc.OutputWindow = hWnd;
     desc.SampleDesc.Count = 1;
-    desc.Windowed = pSetup->windowMode != RENDERER_WINDOWMODE_FULLSCREEN;
+    desc.Windowed = pSetup->windowMode != WindowMode::Fullscreen;
 
     DWORD deviceCreationFlags = 0;
 #ifdef _DEBUG
@@ -898,13 +898,13 @@ namespace Renderer
     D3D11_SHADER_RESOURCE_VIEW_DESC desc;
     ZeroMemory( &desc, sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC) );
     desc.Format = tex->format;
-    if (tex->type == TEXTURETYPE_1D)
+    if (tex->type == TextureType::Tex1D)
     {
       desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE1D;
       desc.Texture1D.MostDetailedMip = 0;
       desc.Texture1D.MipLevels = 1;
     }
-    else if (tex->type == TEXTURETYPE_2D)
+    else if (tex->type == TextureType::Tex2D)
     {
       desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
       desc.Texture2D.MostDetailedMip = 0;
@@ -936,7 +936,7 @@ namespace Renderer
     tex->width = nWidth;
     tex->height = nHeight;
     tex->pTexture = pTex;
-    tex->type = TEXTURETYPE_2D;
+    tex->type = TextureType::Tex2D;
     tex->format = desc.Format;
     CreateResourceView( tex );
     return tex;
@@ -990,7 +990,7 @@ namespace Renderer
     tex->width = width;
     tex->height = height;
     tex->pTexture = pTex;
-    tex->type = TEXTURETYPE_2D;
+    tex->type = TextureType::Tex2D;
     tex->format = desc.Format;
     CreateResourceView(tex);
     return tex;
@@ -1017,7 +1017,7 @@ namespace Renderer
     tex->width = w;
     tex->height = 1;
     tex->pTexture = pTex;
-    tex->type = TEXTURETYPE_1D;
+    tex->type = TextureType::Tex1D;
     tex->format = desc.Format;
     CreateResourceView(tex);
     return tex;
@@ -1075,7 +1075,7 @@ namespace Renderer
     tex->width = w;
     tex->height = h;
     tex->pTexture = pTex;
-    tex->type = TEXTURETYPE_2D;
+    tex->type = TextureType::Tex2D;
     tex->format = desc.Format;
     CreateResourceView(tex);
     return tex;

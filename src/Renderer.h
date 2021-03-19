@@ -1,16 +1,16 @@
 #include <Platform.h>
 
-typedef enum {
-  RENDERER_WINDOWMODE_WINDOWED = 0,
-  RENDERER_WINDOWMODE_FULLSCREEN,
-  RENDERER_WINDOWMODE_BORDERLESS
-} RENDERER_WINDOWMODE;
+enum class WindowMode {
+  Windowed = 0,
+  Fullscreen,
+  Borderless
+};
 
 typedef struct 
 {
   int nWidth;
   int nHeight;
-  RENDERER_WINDOWMODE windowMode;
+  WindowMode windowMode;
   bool bVsync;
 } RENDERER_SETTINGS;
 
@@ -43,17 +43,17 @@ namespace Renderer
 
   void Close();
 
-  enum TEXTURETYPE
+  enum class TextureType
   {
-    TEXTURETYPE_1D = 1,
-    TEXTURETYPE_2D = 2,
+    Tex1D = 1,
+    Tex2D = 2,
   };
 
   struct Texture
   {
     int width;
     int height;
-    TEXTURETYPE type;
+    TextureType type;
   };
 
   Texture * CreateRGBA8Texture();
@@ -89,25 +89,25 @@ namespace Renderer
   extern KeyEvent keyEventBuffer[512];
   extern int keyEventBufferCount;
 
-  enum MOUSEEVENTTYPE
+  enum class MouseEventType
   {
-    MOUSEEVENTTYPE_DOWN = 0,
-    MOUSEEVENTTYPE_MOVE,
-    MOUSEEVENTTYPE_UP,
-    MOUSEEVENTTYPE_SCROLL
+    Down = 0,
+    Move,
+    Up,
+    Scroll
   };
-  enum MOUSEBUTTON
+  enum class MouseButton
   {
-    MOUSEBUTTON_LEFT = 0,
-    MOUSEBUTTON_RIGHT,
-    MOUSEBUTTON_MIDDLE,
+    Left = 0,
+    Right,
+    Middle,
   };
   struct MouseEvent
   {
-    MOUSEEVENTTYPE eventType;
+    MouseEventType eventType;
     float x;
     float y;
-    MOUSEBUTTON button;
+    MouseButton button;
   };
   extern MouseEvent mouseEventBuffer[512];
   extern int mouseEventBufferCount;
