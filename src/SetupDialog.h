@@ -1,12 +1,15 @@
 #pragma once
 
+#include "FFT.h"
+#include "Renderer.h"
+
 namespace SetupDialog
 {
-  typedef struct 
+  struct Settings
   {
-    RENDERER_SETTINGS sRenderer;
-    FFT_SETTINGS sFFT;
-  } SETTINGS;
+    RendererSettings sRenderer;
+    FFTSettings sFFT;
+  };
 
-  bool Open( SETTINGS * pSettings );
+  bool Open( Settings * pSettings );
 }

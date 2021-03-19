@@ -6,7 +6,7 @@
 namespace SetupDialog
 {
 
-bool Open( SetupDialog::SETTINGS * settings )
+bool Open( SetupDialog::Settings * settings )
 {
   std::cerr << __FUNCTION__ << " STUB" << std::endl;
   return true;

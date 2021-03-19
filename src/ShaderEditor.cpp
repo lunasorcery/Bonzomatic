@@ -177,7 +177,7 @@ void ShaderEditor::Initialise()
   vs.Refresh( *surfaceWindow, 4 );
 }
 
-void ShaderEditor::Initialise( SHADEREDITOR_OPTIONS &options )
+void ShaderEditor::Initialise( ShaderEditor_Options &options )
 {
   nFontSize = options.nFontSize;
   sFontFile = options.sFontPath;

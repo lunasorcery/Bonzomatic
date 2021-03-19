@@ -327,7 +327,7 @@ namespace Renderer
     return DefWindowProc(hWnd, uMsg, wParam, lParam);
   }
 
-  bool InitWindow(RENDERER_SETTINGS * pSetup) 
+  bool InitWindow(RendererSettings * pSetup) 
   {
     WNDCLASS WC;
 
@@ -368,7 +368,7 @@ namespace Renderer
   }
 
   bool bVsync = false;
-  bool InitDirect3D(RENDERER_SETTINGS * pSetup) 
+  bool InitDirect3D(RendererSettings * pSetup) 
   {
     DXGI_FORMAT format = DXGI_FORMAT_R8G8B8A8_UNORM;
 
@@ -475,7 +475,7 @@ namespace Renderer
   ID3D11BlendState* pFullscreenQuadBlendState = NULL;
   ID3D11RasterizerState * pFullscreenQuadRasterizerState = NULL;
 
-  bool InitD3D11QuadRendering( RENDERER_SETTINGS * settings )
+  bool InitD3D11QuadRendering( RendererSettings * settings )
   {
     ID3DBlob * pCode = NULL;
     ID3DBlob * pErrors = NULL;
@@ -628,7 +628,7 @@ namespace Renderer
     pout[3 + 3 * 4] = 1.0;
   }
 
-  bool InitD3D11GUIRendering( RENDERER_SETTINGS * settings )
+  bool InitD3D11GUIRendering( RendererSettings * settings )
   {
     ID3DBlob * pCode = NULL;
     ID3DBlob * pErrors = NULL;
@@ -718,7 +718,7 @@ namespace Renderer
     return true;
   }
 
-  bool Open( RENDERER_SETTINGS * settings )
+  bool Open( RendererSettings * settings )
   {
     nWidth  = settings->nWidth;
     nHeight = settings->nHeight;

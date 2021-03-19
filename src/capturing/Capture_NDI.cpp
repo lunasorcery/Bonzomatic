@@ -32,7 +32,7 @@ namespace Capture
         bNDIProgressive = o.get<jsonxx::Object>("ndi").get<jsonxx::Boolean>("progressive");
     }
   }
-  bool Open(RENDERER_SETTINGS & settings)
+  bool Open(RendererSettings & settings)
   {
     if (bNDIEnabled)
     {

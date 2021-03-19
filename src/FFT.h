@@ -2,23 +2,23 @@
 
 #define FFT_SIZE 1024
 
-typedef struct 
+struct FFTSettings
 {
   bool bUseRecordingDevice;
   void * pDeviceID;
-} FFT_SETTINGS;
+};
 
 namespace FFT
 {
-  typedef void (*FFT_ENUMERATE_FUNC)( const bool bIsCaptureDevice, const char * szDeviceName, void * pDeviceID, void * pUserContext );
+  typedef void (*FFTEnumerateFunc)( const bool bIsCaptureDevice, const char * szDeviceName, void * pDeviceID, void * pUserContext );
 
   extern float fAmplification;
 
-  void EnumerateDevices( FFT_ENUMERATE_FUNC pEnumerationFunction, void * pUserContext );
+  void EnumerateDevices( FFTEnumerateFunc pEnumerationFunction, void * pUserContext );
 
   bool Create();
   bool Destroy();
-  bool Open( FFT_SETTINGS * pSettings );
+  bool Open( FFTSettings * pSettings );
   bool GetFFT( float * _samples );
   void Close();
 }

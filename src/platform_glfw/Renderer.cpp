@@ -211,7 +211,7 @@ namespace Renderer
   void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
   void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
-  bool Open( RENDERER_SETTINGS * settings )
+  bool Open( RendererSettings * settings )
   {
     glfwSetErrorCallback(error_callback);
     theShader = 0;

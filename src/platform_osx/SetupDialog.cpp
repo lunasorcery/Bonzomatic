@@ -1,7 +1,5 @@
 #include <iostream>
-#include "../Renderer.h"
-#include "../FFT.h"
-#include "../SetupDialog.h"
+#include "SetupDialog.h"
 #include <CoreFoundation/CoreFoundation.h>
 #include <CoreGraphics/CoreGraphics.h>
 #include <set>
@@ -31,7 +29,7 @@ void BuildListOfMainDisplayResolutions(std::set<Resolution> &resolutions)
   CFRelease(modes);
 }
 
-bool Open( SetupDialog::SETTINGS * settings )
+bool Open( SetupDialog::Settings * settings )
 {
   std::set<Resolution> resolutions;
   

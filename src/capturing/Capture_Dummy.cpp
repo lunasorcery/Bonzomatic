@@ -6,7 +6,7 @@ namespace Capture
   void LoadSettings(jsonxx::Object & o)
   {
   }
-  bool Open(RENDERER_SETTINGS & settings)
+  bool Open(RendererSettings & settings)
   {
     return true;
   }

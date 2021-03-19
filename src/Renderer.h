@@ -8,13 +8,13 @@ enum class WindowMode {
   Borderless
 };
 
-typedef struct 
+struct RendererSettings
 {
   int nWidth;
   int nHeight;
   WindowMode windowMode;
   bool bVsync;
-} RENDERER_SETTINGS;
+};
 
 namespace Renderer
 {
@@ -24,8 +24,8 @@ namespace Renderer
   extern int nWidth;
   extern int nHeight;
 
-  bool OpenSetupDialog( RENDERER_SETTINGS * settings );
-  bool Open( RENDERER_SETTINGS * settings );
+  bool OpenSetupDialog( RendererSettings * settings );
+  bool Open( RendererSettings * settings );
   
   void StartFrame();
   void EndFrame();

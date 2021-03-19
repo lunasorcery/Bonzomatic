@@ -38,7 +38,7 @@ namespace FFT
     }
   }
 
-  void EnumerateDevices( FFT_ENUMERATE_FUNC pEnumerationFunction, void * pUserContext )
+  void EnumerateDevices( FFTEnumerateFunc pEnumerationFunction, void * pUserContext )
   {
     if (!bCreated)
     {
@@ -101,7 +101,7 @@ namespace FFT
     return true;
   }
 
-  bool Open( FFT_SETTINGS * pSettings )
+  bool Open( FFTSettings * pSettings )
   {
     if (!bCreated)
     {

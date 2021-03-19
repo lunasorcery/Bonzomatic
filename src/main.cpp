@@ -104,7 +104,7 @@ int main( int argc, const char *argv[] )
   if ( options.has<jsonxx::Boolean>( "skipSetupDialog" ) )
     skipSetupDialog = options.get<jsonxx::Boolean>( "skipSetupDialog" );
 
-  SetupDialog::SETTINGS settings;
+  SetupDialog::Settings settings;
   settings.sFFT.bUseRecordingDevice = true;
   settings.sFFT.pDeviceID = NULL;
   if ( options.has<jsonxx::Object>( "audio" ) )
@@ -164,7 +164,7 @@ int main( int argc, const char *argv[] )
 
   const char * szDefaultFontPath = Misc::GetDefaultFontPath();
 
-  SHADEREDITOR_OPTIONS editorOptions;
+  ShaderEditor_Options editorOptions;
   editorOptions.nFontSize = 16;
   if ( !szDefaultFontPath )
   {

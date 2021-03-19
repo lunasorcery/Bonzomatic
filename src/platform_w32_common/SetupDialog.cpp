@@ -22,18 +22,18 @@ INT_PTR CALLBACK DlgFunc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 class CSetupDialog
 {
 public:
-  typedef struct {
+  struct Resolution {
     int nWidth;
     int nHeight;
-  } RESOLUTION;
+  };
 
-  typedef struct {
+  struct AudioDevice {
     bool bIsCapture;
     void * pDeviceID;
-  } AUDIODEVICE;
+  };
 
-  std::vector<RESOLUTION> gaResolutions;
-  std::vector<AUDIODEVICE> gaAudioDevices;
+  std::vector<Resolution> gaResolutions;
+  std::vector<AudioDevice> gaAudioDevices;
   HWND hWndSetupDialog;
 
   CSetupDialog(void)
@@ -45,12 +45,12 @@ public:
   {
   }
 
-  SETTINGS * setup;
+  Settings * setup;
 
   int __cdecl ResolutionSort(const void * a, const void * b)
   {
-    RESOLUTION * aa = (RESOLUTION *)a;
-    RESOLUTION * bb = (RESOLUTION *)b;
+    Resolution * aa = (Resolution *)a;
+    Resolution * bb = (Resolution *)b;
     if (aa->nWidth < bb->nWidth) return -1;
     if (aa->nWidth > bb->nWidth) return 1;
     if (aa->nHeight < bb->nHeight) return -1;
@@ -71,7 +71,7 @@ public:
       }
     }
 
-    AUDIODEVICE audioDevice;
+    AudioDevice audioDevice;
     audioDevice.bIsCapture = bIsCaptureDevice;
     audioDevice.pDeviceID = pDeviceID;
     gaAudioDevices.push_back(audioDevice);
@@ -101,7 +101,7 @@ public:
             || gaResolutions[ gaResolutions.size() - 1 ].nWidth != d.dmPelsWidth 
             || gaResolutions[ gaResolutions.size() - 1 ].nHeight != d.dmPelsHeight) 
           {
-            RESOLUTION res;
+            Resolution res;
             res.nWidth  = d.dmPelsWidth;
             res.nHeight = d.dmPelsHeight;
             gaResolutions.push_back(res);
@@ -178,7 +178,7 @@ INT_PTR CALLBACK DlgFunc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
   return pGlobal->DialogProcedure(hWnd,uMsg,wParam,lParam);
 }
 
-bool Open( SetupDialog::SETTINGS * settings )
+bool Open( SetupDialog::Settings * settings )
 {
   CSetupDialog dlg;
   dlg.setup = settings;

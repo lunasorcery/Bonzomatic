@@ -329,7 +329,7 @@ namespace Renderer
     return DefWindowProc(hWnd, uMsg, wParam, lParam);
   }
 
-  bool InitWindow(RENDERER_SETTINGS * pSetup) 
+  bool InitWindow(RendererSettings * pSetup) 
   {
     WNDCLASS WC;
 
@@ -370,7 +370,7 @@ namespace Renderer
   }
 
   D3DPRESENT_PARAMETERS d3dpp;
-  bool InitDirect3D(RENDERER_SETTINGS * pSetup) 
+  bool InitDirect3D(RendererSettings * pSetup) 
   {
     pD3D = Direct3DCreate9(D3D9b_SDK_VERSION);
     if (!pD3D) 
@@ -462,7 +462,7 @@ namespace Renderer
 
 #define GUIQUADVB_SIZE (128*6)
 
-  bool Open( RENDERER_SETTINGS * settings )
+  bool Open( RendererSettings * settings )
   {
     if (!InitWindow(settings))
     {
