@@ -108,8 +108,9 @@ int main( int argc, const char *argv[] )
   settings.sFFT.pDeviceID = NULL;
   if ( options.has<jsonxx::Object>( "audio" ) )
   {
-    if ( options.get<jsonxx::Object>( "audio" ).has<jsonxx::Boolean>( "useInput" ) )
-      settings.sFFT.bUseRecordingDevice = options.get<jsonxx::Object>( "audio" ).get<jsonxx::Boolean>( "useInput" );
+    auto const& cfgAudio = options.get<jsonxx::Object>( "audio" );
+    if ( cfgAudio.has<jsonxx::Boolean>( "useInput" ) )
+      settings.sFFT.bUseRecordingDevice = cfgAudio.get<jsonxx::Boolean>( "useInput" );
   }
 
   settings.sRenderer.bVsync = false;
@@ -124,12 +125,13 @@ int main( int argc, const char *argv[] )
 
   if ( options.has<jsonxx::Object>( "window" ) )
   {
-    if ( options.get<jsonxx::Object>( "window" ).has<jsonxx::Number>( "width" ) )
-      settings.sRenderer.nWidth = options.get<jsonxx::Object>( "window" ).get<jsonxx::Number>( "width" );
-    if ( options.get<jsonxx::Object>( "window" ).has<jsonxx::Number>( "height" ) )
-      settings.sRenderer.nHeight = options.get<jsonxx::Object>( "window" ).get<jsonxx::Number>( "height" );
-    if ( options.get<jsonxx::Object>( "window" ).has<jsonxx::Boolean>( "fullscreen" ) )
-      settings.sRenderer.windowMode = options.get<jsonxx::Object>( "window" ).get<jsonxx::Boolean>( "fullscreen" ) ? WindowMode::Fullscreen : WindowMode::Windowed;
+    auto const& cfgWindow = options.get<jsonxx::Object>( "window" );
+    if ( cfgWindow.has<jsonxx::Number>( "width" ) )
+      settings.sRenderer.nWidth = cfgWindow.get<jsonxx::Number>( "width" );
+    if ( cfgWindow.has<jsonxx::Number>( "height" ) )
+      settings.sRenderer.nHeight = cfgWindow.get<jsonxx::Number>( "height" );
+    if ( cfgWindow.has<jsonxx::Boolean>( "fullscreen" ) )
+      settings.sRenderer.windowMode = cfgWindow.get<jsonxx::Boolean>( "fullscreen" ) ? WindowMode::Fullscreen : WindowMode::Windowed;
   }
   if ( !skipSetupDialog )
   {
@@ -192,16 +194,17 @@ int main( int argc, const char *argv[] )
   {
     if (options.has<jsonxx::Object>("rendering"))
     {
-      if (options.get<jsonxx::Object>("rendering").has<jsonxx::Number>("fftSmoothFactor"))
-        fFFTSmoothingFactor = options.get<jsonxx::Object>("rendering").get<jsonxx::Number>("fftSmoothFactor");
-      if (options.get<jsonxx::Object>("rendering").has<jsonxx::Number>("fftAmplification"))
-        FFT::fAmplification = options.get<jsonxx::Object>("rendering").get<jsonxx::Number>("fftAmplification");
+      auto const& cfgRendering = options.get<jsonxx::Object>("rendering");
+      if (cfgRendering.has<jsonxx::Number>("fftSmoothFactor"))
+        fFFTSmoothingFactor = cfgRendering.get<jsonxx::Number>("fftSmoothFactor");
+      if (cfgRendering.has<jsonxx::Number>("fftAmplification"))
+        FFT::fAmplification = cfgRendering.get<jsonxx::Number>("fftAmplification");
     }
 
     if (options.has<jsonxx::Object>("textures"))
     {
       printf("Loading textures...\n");
-      std::map<std::string, jsonxx::Value*> tex = options.get<jsonxx::Object>("textures").kv_map();
+      std::map<std::string, jsonxx::Value*> const& tex = options.get<jsonxx::Object>("textures").kv_map();
       for (auto const& it : tex)
       {
         const char * fn = it.second->string_value_->c_str();
@@ -217,11 +220,12 @@ int main( int argc, const char *argv[] )
     }
     if (options.has<jsonxx::Object>("font"))
     {
-      if (options.get<jsonxx::Object>("font").has<jsonxx::Number>("size"))
-        editorOptions.nFontSize = options.get<jsonxx::Object>("font").get<jsonxx::Number>("size");
-      if (options.get<jsonxx::Object>("font").has<jsonxx::String>("file"))
+      auto const& cfgFont = options.get<jsonxx::Object>("font");
+      if (cfgFont.has<jsonxx::Number>("size"))
+        editorOptions.nFontSize = cfgFont.get<jsonxx::Number>("size");
+      if (cfgFont.has<jsonxx::String>("file"))
       {
-        std::string fontpath = options.get<jsonxx::Object>("font").get<jsonxx::String>("file");
+        std::string fontpath = cfgFont.get<jsonxx::String>("file");
         if (!Misc::FileExists(fontpath.c_str()))
         {
           printf("Font path (%s) is invalid!\n", fontpath.c_str());
@@ -232,21 +236,22 @@ int main( int argc, const char *argv[] )
     }
     if (options.has<jsonxx::Object>("gui"))
     {
-      if (options.get<jsonxx::Object>("gui").has<jsonxx::Number>("outputHeight"))
-        nDebugOutputHeight = options.get<jsonxx::Object>("gui").get<jsonxx::Number>("outputHeight");
-      if (options.get<jsonxx::Object>("gui").has<jsonxx::Number>("texturePreviewWidth"))
-        nTexPreviewWidth = options.get<jsonxx::Object>("gui").get<jsonxx::Number>("texturePreviewWidth");
-      if (options.get<jsonxx::Object>("gui").has<jsonxx::Number>("opacity"))
-        editorOptions.nOpacity = options.get<jsonxx::Object>("gui").get<jsonxx::Number>("opacity");
-      if (options.get<jsonxx::Object>("gui").has<jsonxx::Boolean>("spacesForTabs"))
-        editorOptions.bUseSpacesForTabs = options.get<jsonxx::Object>("gui").get<jsonxx::Boolean>("spacesForTabs");
-      if (options.get<jsonxx::Object>("gui").has<jsonxx::Number>("tabSize"))
-        editorOptions.nTabSize = options.get<jsonxx::Object>("gui").get<jsonxx::Number>("tabSize");
-      if (options.get<jsonxx::Object>("gui").has<jsonxx::Boolean>("visibleWhitespace"))
-        editorOptions.bVisibleWhitespace = options.get<jsonxx::Object>("gui").get<jsonxx::Boolean>("visibleWhitespace");
-      if (options.get<jsonxx::Object>("gui").has<jsonxx::String>("autoIndent"))
+      auto const& cfgGui = options.get<jsonxx::Object>("gui");
+      if (cfgGui.has<jsonxx::Number>("outputHeight"))
+        nDebugOutputHeight = cfgGui.get<jsonxx::Number>("outputHeight");
+      if (cfgGui.has<jsonxx::Number>("texturePreviewWidth"))
+        nTexPreviewWidth = cfgGui.get<jsonxx::Number>("texturePreviewWidth");
+      if (cfgGui.has<jsonxx::Number>("opacity"))
+        editorOptions.nOpacity = cfgGui.get<jsonxx::Number>("opacity");
+      if (cfgGui.has<jsonxx::Boolean>("spacesForTabs"))
+        editorOptions.bUseSpacesForTabs = cfgGui.get<jsonxx::Boolean>("spacesForTabs");
+      if (cfgGui.has<jsonxx::Number>("tabSize"))
+        editorOptions.nTabSize = cfgGui.get<jsonxx::Number>("tabSize");
+      if (cfgGui.has<jsonxx::Boolean>("visibleWhitespace"))
+        editorOptions.bVisibleWhitespace = cfgGui.get<jsonxx::Boolean>("visibleWhitespace");
+      if (cfgGui.has<jsonxx::String>("autoIndent"))
       {
-        std::string autoIndent = options.get<jsonxx::Object>("gui").get<jsonxx::String>("autoIndent");
+        std::string autoIndent = cfgGui.get<jsonxx::String>("autoIndent");
         if (autoIndent == "smart") {
           editorOptions.eAutoIndent = AutoIndentationType::Smart;
         } else if (autoIndent == "preserve") {
@@ -255,10 +260,10 @@ int main( int argc, const char *argv[] )
           editorOptions.eAutoIndent = AutoIndentationType::None;
         }
       }
-      if (options.get<jsonxx::Object>("gui").has<jsonxx::Number>("scrollXFactor"))
-        fScrollXFactor = options.get<jsonxx::Object>("gui").get<jsonxx::Number>("scrollXFactor");
-      if (options.get<jsonxx::Object>("gui").has<jsonxx::Number>("scrollYFactor"))
-        fScrollYFactor = options.get<jsonxx::Object>("gui").get<jsonxx::Number>("scrollYFactor");
+      if (cfgGui.has<jsonxx::Number>("scrollXFactor"))
+        fScrollXFactor = cfgGui.get<jsonxx::Number>("scrollXFactor");
+      if (cfgGui.has<jsonxx::Number>("scrollYFactor"))
+        fScrollYFactor = cfgGui.get<jsonxx::Number>("scrollYFactor");
     }
     if (options.has<jsonxx::Object>("theme"))
     {
@@ -288,7 +293,7 @@ int main( int argc, const char *argv[] )
     }
     if (options.has<jsonxx::Object>("midi"))
     {
-      std::map<std::string, jsonxx::Value*> tex = options.get<jsonxx::Object>("midi").kv_map();
+      std::map<std::string, jsonxx::Value*> const& tex = options.get<jsonxx::Object>("midi").kv_map();
       for (auto const& it : tex)
       {
         midiRoutes[it.second->number_value_] = it.first;
