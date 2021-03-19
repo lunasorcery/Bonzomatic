@@ -50,13 +50,12 @@ void ReplaceTokens( std::string &sDefShader, const char * sTokenBegin, const cha
     std::string sFinalShader;
     sFinalShader = sDefShader.substr( 0, sDefShader.find(sTokenBegin) );
 
-    //for (std::map<std::string, Renderer::Texture*>::iterator it = tokens.begin(); it != tokens.end(); it++)
-    for (int i=0; i < tokens.size(); i++)
+    for (auto const& token : tokens)
     {
       std::string s = sTextureToken;
       while (s.find(sTokenName) != std::string::npos)
       {
-        s.replace( s.find(sTokenName), strlen(sTokenName), tokens[i], 0, std::string::npos );
+        s.replace( s.find(sTokenName), strlen(sTokenName), token, 0, std::string::npos );
       }
       sFinalShader += s;
     }
@@ -203,9 +202,9 @@ int main( int argc, const char *argv[] )
     {
       printf("Loading textures...\n");
       std::map<std::string, jsonxx::Value*> tex = options.get<jsonxx::Object>("textures").kv_map();
-      for (std::map<std::string, jsonxx::Value*>::iterator it = tex.begin(); it != tex.end(); it++)
+      for (auto const& it : tex)
       {
-        const char * fn = it->second->string_value_->c_str();
+        const char * fn = it.second->string_value_->c_str();
         printf("* %s...\n",fn);
         Renderer::Texture * tex = Renderer::CreateRGBA8TextureFromFile( fn );
         if (!tex)
@@ -213,7 +212,7 @@ int main( int argc, const char *argv[] )
           printf("Renderer::CreateRGBA8TextureFromFile(%s) failed\n",fn);
           return -1;
         }
-        textures[it->first] = tex;
+        textures[it.first] = tex;
       }
     }
     if (options.has<jsonxx::Object>("font"))
@@ -290,9 +289,9 @@ int main( int argc, const char *argv[] )
     if (options.has<jsonxx::Object>("midi"))
     {
       std::map<std::string, jsonxx::Value*> tex = options.get<jsonxx::Object>("midi").kv_map();
-      for (std::map<std::string, jsonxx::Value*>::iterator it = tex.begin(); it != tex.end(); it++)
+      for (auto const& it : tex)
       {
-        midiRoutes[it->second->number_value_] = it->first;
+        midiRoutes[it.second->number_value_] = it.first;
       }
     }
     if (options.has<jsonxx::String>("postExitCmd"))
@@ -344,13 +343,13 @@ int main( int argc, const char *argv[] )
     std::string sDefShader = Renderer::defaultShader;
 
     std::vector<std::string> tokens;
-    for (std::map<std::string, Renderer::Texture*>::iterator it = textures.begin(); it != textures.end(); it++)
-      tokens.push_back(it->first);
+    for (auto const& it : textures)
+      tokens.push_back(it.first);
     ReplaceTokens(sDefShader, "{%textures:begin%}", "{%textures:name%}", "{%textures:end%}", tokens);
 
     tokens.clear();
-    for (std::map<int,std::string>::iterator it = midiRoutes.begin(); it != midiRoutes.end(); it++)
-      tokens.push_back(it->second);
+    for (auto const& it : midiRoutes)
+      tokens.push_back(it.second);
     ReplaceTokens(sDefShader, "{%midi:begin%}", "{%midi:name%}", "{%midi:end%}", tokens);
 
     strncpy( szShader, sDefShader.c_str(), 65535 );
@@ -495,9 +494,9 @@ int main( int argc, const char *argv[] )
     Renderer::SetShaderConstant( "fFrameTime", ( fTime - fLastTimeMS ) / 1000.0f );
     fLastTimeMS = fTime;
 
-    for (std::map<int,std::string>::iterator it = midiRoutes.begin(); it != midiRoutes.end(); it++)
+    for (auto const& it : midiRoutes)
     {
-      Renderer::SetShaderConstant( it->second.c_str(), MIDI::GetCCValue( it->first ) );
+      Renderer::SetShaderConstant( it.second.c_str(), MIDI::GetCCValue( it.first ) );
     }
 
 
@@ -526,9 +525,9 @@ int main( int argc, const char *argv[] )
     Renderer::SetShaderTexture( "texFFTIntegrated", texFFTIntegrated );
     Renderer::SetShaderTexture( "texPreviousFrame", texPreviousFrame );
 
-    for (std::map<std::string, Renderer::Texture*>::iterator it = textures.begin(); it != textures.end(); it++)
+    for (auto const& it : textures)
     {
-      Renderer::SetShaderTexture( it->first.c_str(), it->second );
+      Renderer::SetShaderTexture( it.first.c_str(), it.second );
     }
 
     Renderer::RenderFullscreenQuad();
@@ -556,17 +555,17 @@ int main( int argc, const char *argv[] )
         int y1 = nMargin;
         int x1 = settings.sRenderer.nWidth - nMargin - nTexPreviewWidth;
         int x2 = settings.sRenderer.nWidth - nMargin;
-        for (std::map<std::string, Renderer::Texture*>::iterator it = textures.begin(); it != textures.end(); it++)
+        for (auto const& it : textures)
         {
-          int y2 = y1 + nTexPreviewWidth * (it->second->height / (float)it->second->width);
-          Renderer::BindTexture( it->second );
+          int y2 = y1 + nTexPreviewWidth * (it.second->height / (float)it.second->width);
+          Renderer::BindTexture( it.second );
           Renderer::RenderQuad(
             Renderer::Vertex( x1, y1, 0xccFFFFFF, 0.0, 0.0 ),
             Renderer::Vertex( x2, y1, 0xccFFFFFF, 1.0, 0.0 ),
             Renderer::Vertex( x2, y2, 0xccFFFFFF, 1.0, 1.0 ),
             Renderer::Vertex( x1, y2, 0xccFFFFFF, 0.0, 1.0 )
           );
-          surface->DrawTextNoClip( Scintilla::PRectangle(x1,y1,x2,y2), *mShaderEditor.GetTextFont(), y2 - 5.0, it->first.c_str(), (int)it->first.length(), 0xffFFFFFF, 0x00000000);
+          surface->DrawTextNoClip( Scintilla::PRectangle(x1,y1,x2,y2), *mShaderEditor.GetTextFont(), y2 - 5.0, it.first.c_str(), (int)it.first.length(), 0xffFFFFFF, 0x00000000);
           y1 = y2 + nMargin;
         }
       }
@@ -611,9 +610,9 @@ int main( int argc, const char *argv[] )
   Renderer::ReleaseTexture( texPreviousFrame );
   Renderer::ReleaseTexture( texFFT );
   Renderer::ReleaseTexture( texFFTSmoothed );
-  for (std::map<std::string, Renderer::Texture*>::iterator it = textures.begin(); it != textures.end(); it++)
+  for (auto const& it : textures)
   {
-    Renderer::ReleaseTexture( it->second );
+    Renderer::ReleaseTexture( it.second );
   }
 
   Renderer::Close();
