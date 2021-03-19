@@ -1,3 +1,5 @@
+#pragma once
+
 namespace Clipboard
 {
   void Copy( const char * data, int len );

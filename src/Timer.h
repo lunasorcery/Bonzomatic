@@ -1,3 +1,5 @@
+#pragma once
+
 namespace Timer
 {
   void Start();

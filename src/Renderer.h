@@ -1,3 +1,5 @@
+#pragma once
+
 #include <Platform.h>
 
 enum class WindowMode {

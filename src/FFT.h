@@ -1,3 +1,5 @@
+#pragma once
+
 #define FFT_SIZE 1024
 
 typedef struct 

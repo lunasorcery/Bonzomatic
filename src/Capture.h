@@ -1,3 +1,5 @@
+#pragma once
+
 namespace Capture
 {
   void LoadSettings(jsonxx::Object & o);
